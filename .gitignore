@@ -1,3 +1,5 @@
+#git push origin master
+
 # Ignore node_modules directory
 node_modules/
 
