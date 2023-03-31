@@ -43,12 +43,33 @@
 
 const express = require('express');
 const app = express();
+const multer = require("multer");
 const bodyParser = require('body-parser');
 const Tesseract = require("tesseract.js");
 const cors = require('cors');
 app.use(cors());
 app.use(bodyParser.json());
 
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/api/upload", upload.single("uploadedImage"), (req, res) => {
+  console.log(req.file);
+  res.status(200).json({
+    message: 'Suceess file',
+  });
+  
+});
 // API route
 app.get('/api/data', (req, res) => {
 
