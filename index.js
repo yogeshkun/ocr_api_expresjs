@@ -61,12 +61,11 @@
 // });
 
 const express = require('express');
-const cors = require('cors');
-
 const app = express();
-
-// Enable CORS
+const bodyParser = require('body-parser');
+const cors = require('cors');
 app.use(cors());
+app.use(bodyParser.json());
 
 // API route
 app.get('/api/data', (req, res) => {
@@ -79,7 +78,9 @@ app.get('/api/data', (req, res) => {
 //   // Send JSON response
 //   res.json(data);
 
-    console.log("Hello WOlrd")
+res.status(200).json({
+  message: 'Suceess',
+});
 
 });
 
