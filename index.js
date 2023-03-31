@@ -30,26 +30,7 @@
   
 // // });
 
-// app.post("/api/users", (req, res) => {
-//   const { name } = req.body;
 
-//   let imageBuffer = Buffer.from(name, "base64");
-//   try {
-//     Tesseract.recognize(
-//       // this first argument is for the location of an image it can be a //url like below or you can set a local path in your computer
-//       // 'uploads/'+req.file.filename,
-//       imageBuffer,
-//       // this second argument is for the laguage
-//       "eng",
-//       { logger: (m) => console.log(m) }
-//     ).then(({ data: { text } }) => {
-//       console.log(text);
-//       return res.json({ message: text });
-//     });
-//   } catch (error) {
-//     console.log("Error" + error);
-//   }
-// });
 
 // app.get("/api/uploads", (req, res) => {
 //     console.log("Hello World");
@@ -63,25 +44,39 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const Tesseract = require("tesseract.js");
 const cors = require('cors');
 app.use(cors());
 app.use(bodyParser.json());
 
 // API route
 app.get('/api/data', (req, res) => {
-  // Generate your JSON data here
-//   const data = {
-//     message: 'Hello World!',
-//     timestamp: new Date().getTime()
-//   };
-
-//   // Send JSON response
-//   res.json(data);
 
 res.status(200).json({
   message: 'Suceess',
 });
 
+});
+
+app.post("/api/users", (req, res) => {
+  const { name } = req.body;
+
+  let imageBuffer = Buffer.from(name, "base64");
+  try {
+    Tesseract.recognize(
+      // this first argument is for the location of an image it can be a //url like below or you can set a local path in your computer
+      // 'uploads/'+req.file.filename,
+      imageBuffer,
+      // this second argument is for the laguage
+      "eng",
+      { logger: (m) => console.log(m) }
+    ).then(({ data: { text } }) => {
+      console.log(text);
+      return res.json({ message: text });
+    });
+  } catch (error) {
+    console.log("Error" + error);
+  }
 });
 
 // Start server
