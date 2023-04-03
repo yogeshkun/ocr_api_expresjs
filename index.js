@@ -57,17 +57,34 @@ const storage = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    console.log(file)
+    cb(null, "NewImage.png");
   },
 });
 
 const upload = multer({ storage: storage });
 
 app.post("/api/upload", upload.single("uploadedImage"), (req, res) => {
-  console.log(req.file);
-  res.status(200).json({
-    message: 'Suceess file',
-  });
+  // console.log(req.file);
+
+  try {
+    Tesseract.recognize(
+      // this first argument is for the location of an image it can be a //url like below or you can set a local path in your computer
+      // 'uploads/'+req.file.filename,
+      'NewImage.png',
+      // this second argument is for the laguage
+      "eng",
+      { logger: (m) => console.log(m) }
+    ).then(({ data: { text } }) => {
+      console.log(text);
+      return res.json({ message: text });
+    });
+  } catch (error) {
+    console.log("Error" + error);
+  }
+  // res.status(200).json({
+  //   message: 'Suceess file',
+  // });
   
 });
 // API route
@@ -80,24 +97,10 @@ res.status(200).json({
 });
 
 app.post("/api/users", (req, res) => {
-  const { name } = req.body;
+  // const { name } = req.body;
 
-  let imageBuffer = Buffer.from(name, "base64");
-  try {
-    Tesseract.recognize(
-      // this first argument is for the location of an image it can be a //url like below or you can set a local path in your computer
-      // 'uploads/'+req.file.filename,
-      imageBuffer,
-      // this second argument is for the laguage
-      "eng",
-      { logger: (m) => console.log(m) }
-    ).then(({ data: { text } }) => {
-      console.log(text);
-      return res.json({ message: text });
-    });
-  } catch (error) {
-    console.log("Error" + error);
-  }
+  // let imageBuffer = Buffer.from(name, "base64");
+  
 });
 
 // Start server
